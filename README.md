@@ -12,7 +12,7 @@ A Python application that interacts with the JSONPlaceholder API, demonstrating 
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/Vic-bot-boss/BangOlufsen_task.git
-   cd jsonplaceholder-client
+   cd BangOlufsen_task
    ```
 
 2. **Create a virtual environment:**
