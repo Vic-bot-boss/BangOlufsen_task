@@ -4,3 +4,4 @@ pytest
 pytest-cov
 requests-mock
 types-requests
+pytest-requests-mock
