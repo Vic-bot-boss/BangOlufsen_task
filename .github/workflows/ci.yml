@@ -7,6 +7,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      PYTHONPATH: ./src # Add the src directory to the PYTHONPATH
+
     steps:
     - uses: actions/checkout@v3
 
@@ -30,4 +33,3 @@ jobs:
       run: |
         source venv/bin/activate
         pytest --cov=src tests/
-
