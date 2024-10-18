@@ -4,4 +4,3 @@ pytest
 pytest-cov
 requests-mock
 types-requests
-

@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual triggering
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
     - name: Run Mypy
       run: |
         source venv/bin/activate
-        mypy src/
+        mypy src/ tests/
 
     - name: Run Tests
       run: |
