@@ -17,7 +17,7 @@ A Python application that interacts with the JSONPlaceholder API, demonstrating 
 
 2. **Create a virtual environment:**
    ```bash
-   python3 -m venv venv
+   python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```   
 
