@@ -1,6 +1,6 @@
-requests
-mypy
-pytest
-pytest-cov
-requests-mock
-types-requests
+requests==2.32.3
+mypy==1.12.0
+pytest==8.3.3
+pytest-cov==5.0.0
+requests-mock==1.12.1
+types-requests==2.32.0.20241016

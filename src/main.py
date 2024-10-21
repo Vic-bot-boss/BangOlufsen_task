@@ -1,42 +1,60 @@
 # src/main.py
 import requests
-from typing import List, Dict, Any
+from typing import List
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(message)s')
 
 class JSONPlaceholderClient:
     def __init__(self, base_url: str = "https://jsonplaceholder.typicode.com") -> None:
         self.base_url: str = base_url
 
-    def get_posts(self) -> List[Dict[str, Any]]:
+    def get_posts(self) -> List[dict]:
         '''Fetches posts from the JSONPlaceholder API
         Returns:
-            List[Dict[str, Any]]: List of posts
+            List[dict]: List of posts
         '''
-        response: requests.Response = requests.get(f"{self.base_url}/posts")
-        response.raise_for_status()
-        posts: List[Dict[str, Any]] = response.json()
-        return posts
+        try:
+            response: requests.Response = requests.get(f"{self.base_url}/posts")
+            response.raise_for_status()
+            posts: List[dict] = response.json()
+            return posts
+        except requests.RequestException as e:
+            logging.error(f"Error fetching posts: {e}")
+            raise
 
-    def get_users(self) -> List[Dict[str, Any]]:
+    def get_users(self) -> List[dict]:
         '''Fetches users from the JSONPlaceholder API
         Returns:
-            List[Dict[str, Any]]: List of users
+            List[dict]: List of users
         '''
-        response: requests.Response = requests.get(f"{self.base_url}/users")
-        response.raise_for_status()
-        users: List[Dict[str, Any]] = response.json()
-        return users
+        try:
+            response: requests.Response = requests.get(f"{self.base_url}/users")
+            response.raise_for_status()
+            users: List[dict] = response.json()
+            return users
+        except requests.RequestException as e:
+            logging.error(f"Error fetching users: {e}")
+            raise
 
 def fetch_and_print_data(client: JSONPlaceholderClient) -> None:
     '''Fetches and prints posts and users from the JSONPlaceholder API'''
-    posts: List[Dict[str, Any]] = client.get_posts()
-    users: List[Dict[str, Any]] = client.get_users()
+    try:
+        posts: List[dict] = client.get_posts()
+        users: List[dict] = client.get_users()
 
-    print("Posts:", posts)
-    print("Users:", users)
+        logging.info(f"Posts: {posts}")
+        logging.info(f"Users: {users}")
+    except Exception as e:
+        logging.error(f"An error occurred while fetching data: {e}")
 
 def main() -> None:
     client: JSONPlaceholderClient = JSONPlaceholderClient()
     fetch_and_print_data(client)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logging.critical(f"Application terminated due to an unexpected error: {e}")
