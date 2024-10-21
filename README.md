@@ -59,13 +59,13 @@ pytest --cov=src tests/
 The current test coverage of the project is as follows:
 
 ```bash
----------- coverage: platform win32, python 3.10.6-final-0 -----------
+---------- coverage: platform linux, python 3.10.15-final-0 ----------
 Name              Stmts   Miss  Cover
 -------------------------------------
-src\__init__.py       0      0   100%
-src\main.py          25      3    88%
+src/__init__.py       0      0   100%
+src/main.py          41      8    80%
 -------------------------------------
-TOTAL                25      3    88%
+TOTAL                41      8    80%
 ```
 
 ## Continuous Integration
