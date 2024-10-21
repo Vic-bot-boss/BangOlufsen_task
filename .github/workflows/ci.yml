@@ -1,3 +1,4 @@
+# .github/workflows/ci.yml
 name: CI
 
 on:
@@ -30,3 +31,9 @@ jobs:
       run: |
         source venv/bin/activate
         pytest --cov=src tests/
+
+    - name: Upload Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage.xml
