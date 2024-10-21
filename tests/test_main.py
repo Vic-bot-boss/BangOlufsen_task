@@ -6,13 +6,11 @@ import pytest
 import requests_mock
 from unittest.mock import patch
 
-
 # Fixture to initialize the client
 @pytest.fixture
 def client() -> JSONPlaceholderClient:
     return JSONPlaceholderClient()
 
-# Test successful API responses
 def test_get_posts_success(client: JSONPlaceholderClient, requests_mock: requests_mock.Mocker) -> None:
     '''Test successful API response for get_posts method'''	
     mock_posts = [{"userId": 1, "id": 1, "title": "Test Post", "body": "This is a test post"}]
@@ -21,7 +19,6 @@ def test_get_posts_success(client: JSONPlaceholderClient, requests_mock: request
     posts = client.get_posts()
     assert posts == mock_posts
 
-# Test failure in API calls (500 server error)
 def test_get_posts_failure(client: JSONPlaceholderClient, requests_mock: requests_mock.Mocker) -> None:
     '''Test failure in API response for get_posts method'''	
     requests_mock.get(f"{client.base_url}/posts", status_code=500)
@@ -29,7 +26,6 @@ def test_get_posts_failure(client: JSONPlaceholderClient, requests_mock: request
     with pytest.raises(requests.exceptions.HTTPError):
         client.get_posts()
 
-# Parametrized tests for various successful API calls
 @pytest.mark.parametrize("endpoint, method, expected", [
     ("/posts", "get_posts", [{"userId": 1, "id": 1, "title": "Test Post"}]),
     ("/users", "get_users", [{"id": 1, "name": "Test User"}]),
@@ -42,7 +38,6 @@ def test_api_methods_success(client: JSONPlaceholderClient, requests_mock: reque
     result = api_method()
     assert result == expected
 
-# Test empty response handling
 def test_get_posts_empty_response(client: JSONPlaceholderClient, requests_mock: requests_mock.Mocker) -> None:
     '''Test empty response for get_posts method'''	
     requests_mock.get(f"{client.base_url}/posts", json=[], status_code=200)
@@ -50,7 +45,6 @@ def test_get_posts_empty_response(client: JSONPlaceholderClient, requests_mock: 
     posts = client.get_posts()
     assert posts == []
 
-# Test connection errors
 def test_get_posts_connection_error(client: JSONPlaceholderClient, requests_mock: requests_mock.Mocker) -> None:
     '''Test connection error for get_posts method'''	
     requests_mock.get(f"{client.base_url}/posts", exc=requests.exceptions.ConnectionError)
@@ -58,7 +52,6 @@ def test_get_posts_connection_error(client: JSONPlaceholderClient, requests_mock
     with pytest.raises(requests.exceptions.ConnectionError):
         client.get_posts()
 
-# Parametrized tests for failure scenarios
 @pytest.mark.parametrize("endpoint, method, status_code", [
     ("/posts", "get_posts", 400),
     ("/users", "get_users", 404),
@@ -71,16 +64,16 @@ def test_api_methods_failure(client: JSONPlaceholderClient, requests_mock: reque
     with pytest.raises(requests.exceptions.HTTPError):
         api_method()
 
-# Test fetch and print function
-@patch('builtins.print')
+@patch('logging.info')
 @patch.object(JSONPlaceholderClient, 'get_posts')
 @patch.object(JSONPlaceholderClient, 'get_users')
-def test_fetch_and_print_data(mock_get_users, mock_get_posts, mock_print):
+def test_fetch_and_print_data(mock_get_users, mock_get_posts, mock_logging_info):
     mock_get_posts.return_value = [{"userId": 1, "id": 1, "title": "Test Post"}]
     mock_get_users.return_value = [{"id": 1, "name": "Test User"}]
 
     client = JSONPlaceholderClient()
     fetch_and_print_data(client)
 
-    mock_print.assert_any_call("Posts:", [{"userId": 1, "id": 1, "title": "Test Post"}])
-    mock_print.assert_any_call("Users:", [{"id": 1, "name": "Test User"}])
+    # Check that logging.info was called with the correct arguments
+    mock_logging_info.assert_any_call(f"Posts: {mock_get_posts.return_value}")
+    mock_logging_info.assert_any_call(f"Users: {mock_get_users.return_value}")
